@@ -156,7 +156,7 @@ dmypy.json
 cython_debug/
 
 #MIGRATION
-src/posts/migration/
+src/posts/migrations/
 src/media_root/
 .vscode/
 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post List</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {%load crispy_forms_tags %} 
+
+    {% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ object.title }}</h1>
+                        <p class="card-text">{{ object.content }}</p>
+                        <img src="{{ object.thumbnail.url }}" alt="Post Image" class="img-fluid mb-3">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-3"><i class="far fa-eye"></i> {{ object.get_view_count }}</span>
+                                    <span class="me-3"><i class="fas fa-heart"></i> {{ object.get_like_count }}</span>
+                                    <span><i class="fas fa-comment"></i> {{ object.get_comment_count }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <h4 class="mb-3">¿Te gustó el post? Dale me gusta</h4>
+                                <a href="{{ object.get_like_url }}" class="btn btn-primary"><i class="fas fa-heart"></i> 
+                                    Me gusta
+                                </a>
+                            </div>
+                            <hr>
+                            {% if request.user.is_authenticated %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h1>Write a comment</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-4">Comment</button>
+                </form>
+                <hr>
+                <h5>Comments</h5>
+                {% for comment in object.comments %}
+                    <div>
+                        <p>{{ comment.content }}</p>
+                        <small>{{ comment.timestamp|timesince }} ago</small>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <a href="{% url "account_login" %}" class="btn btn-info">Login to Comment</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+</body>
+</html>
